@@ -13,39 +13,72 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 fun MainScreen(viewModel: MainViewModel = viewModel()) {
     val nameInput by viewModel.nameInput
     val character by viewModel.character
+    val currentScreen by viewModel.currentScreen
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            OutlinedTextField(
-                value = nameInput,
-                onValueChange = { viewModel.updateNameInput(it) },
-                label = { Text("Enter Character Name") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { viewModel.createCharacter() },
-                enabled = nameInput.isNotBlank()
+    when (currentScreen) {
+        Screen.Main -> {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
             ) {
-                Text("Create Character")
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    OutlinedTextField(
+                        value = nameInput,
+                        onValueChange = { viewModel.updateNameInput(it) },
+                        label = { Text("Enter Character Name") },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = { viewModel.createCharacter() },
+                        enabled = nameInput.isNotBlank()
+                    ) {
+                        Text("Create Character")
+                    }
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+        }
+        Screen.CharacterDetail -> {
             character?.let { char ->
-                Text(
-                    text = char.toString(),
-                    style = MaterialTheme.typography.bodyLarge
+                CharacterDetailScreen(
+                    character = char,
+                    onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
+                    onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                    onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
                 )
             }
+        }
+        Screen.Skills -> {
+            SkillsScreen(
+                onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
+                onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+            )
+        }
+        Screen.Inventory -> {
+            InventoryScreen(
+                onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
+                onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+            )
+        }
+        Screen.Wounds -> {
+            WoundsScreen(
+                onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
+                onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+            )
         }
     }
 }

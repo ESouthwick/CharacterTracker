@@ -16,6 +16,10 @@ class MainViewModel : ViewModel() {
     val character: State<Character?>
         get() = _character
 
+    private var _currentScreen = mutableStateOf(Screen.Main)
+    val currentScreen: State<Screen>
+        get() = _currentScreen
+
     fun updateNameInput(newName: String) {
         _nameInput.value = newName
     }
@@ -24,6 +28,19 @@ class MainViewModel : ViewModel() {
         if (_nameInput.value.isNotBlank()) {
             _character.value = Character(_nameInput.value)
             _nameInput.value = ""
+            _currentScreen.value = Screen.CharacterDetail
         }
     }
+
+    fun navigateTo(screen: Screen) {
+        _currentScreen.value = screen
+    }
+}
+
+enum class Screen {
+    Main,
+    CharacterDetail,
+    Skills,
+    Inventory,
+    Wounds
 }
