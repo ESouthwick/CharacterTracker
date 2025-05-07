@@ -12,7 +12,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun MainScreen(viewModel: MainViewModel = viewModel()) {
     val nameInput by viewModel.nameInput
-    val character by viewModel.character
+    val characters by viewModel.characters
+    val selectedCharacter by viewModel.selectedCharacter
     val currentScreen by viewModel.currentScreen
 
     when (currentScreen) {
@@ -46,39 +47,62 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
             }
         }
         Screen.CharacterDetail -> {
-            character?.let { char ->
+            selectedCharacter?.let { char ->
                 CharacterDetailScreen(
                     character = char,
-                    onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
+                    onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
+                    onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
                     onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
                 )
             }
         }
-        Screen.Skills -> {
-            SkillsScreen(
-                onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
+        Screen.Characters -> {
+            CharactersScreen(
+                characters = characters,
+                onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
+                onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                 onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                 onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                onCharacterSelected = { viewModel.selectCharacter(it) }
             )
+        }
+        Screen.Skills -> {
+            selectedCharacter?.let { char ->
+                SkillsScreen(
+                    character = char,
+                    onSkillUpdated = { viewModel.updateSkills(it) },
+                    onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
+                    onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
+                    onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                    onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                )
+            }
         }
         Screen.Inventory -> {
-            InventoryScreen(
-                onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
-                onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
-                onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
-            )
+            selectedCharacter?.let { char ->
+                InventoryScreen(
+                    onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
+                    onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
+                    onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                    onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                )
+            }
         }
         Screen.Wounds -> {
-            WoundsScreen(
-                onNavigateToHome = { viewModel.navigateTo(Screen.Main) },
-                onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
-                onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
-            )
+            selectedCharacter?.let { char ->
+                WoundsScreen(
+                    onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
+                    onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
+                    onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
+                    onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                )
+            }
         }
     }
 }

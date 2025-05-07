@@ -1,29 +1,31 @@
 package com.example.character.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CharacterDetailScreen(
-    character: Character,
+fun CharactersScreen(
+    characters: List<Character>,
+    onNavigateToHome: () -> Unit,
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
-    onNavigateToHome: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit
+    onNavigateToWounds: () -> Unit,
+    onCharacterSelected: (Character) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(character.name) }
+                title = { Text("Characters") }
             )
         },
         bottomBar = {
@@ -61,17 +63,26 @@ fun CharacterDetailScreen(
             }
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(16.dp)
         ) {
-            Text(
-                text = "Gold: ${character.coinPouch}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            items(characters) { character ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    onClick = { onCharacterSelected(character) }
+                ) {
+                    Text(
+                        text = character.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
         }
     }
 } 
