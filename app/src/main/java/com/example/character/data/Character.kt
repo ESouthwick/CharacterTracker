@@ -7,7 +7,7 @@ data class Character(
     val wounds: Int = 0,
     val deathTally: Int = 0,
     val inventory: List<Item> = emptyList(),
-    val coinPouch: Int = 0,
+    val gp: Int = 0,
     val skills: Skills = Skills()
 )
 

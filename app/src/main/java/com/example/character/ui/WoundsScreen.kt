@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
+import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,12 +20,14 @@ fun WoundsScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit
+    onNavigateToWounds: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(character.name) }
+            CommonTopAppBar(
+                title = character.name,
+                onSettingsClick = onNavigateToSettings
             )
         },
         bottomBar = {

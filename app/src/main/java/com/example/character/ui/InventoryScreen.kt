@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
 import com.example.character.data.Item
+import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,16 +23,28 @@ fun InventoryScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit
+    onNavigateToWounds: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     var showTokenDialog by remember { mutableStateOf(false) }
+    var showGPDialog by remember { mutableStateOf(false) }
     var selectedTokenType by remember { mutableStateOf<TokenType?>(null) }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(character.name) }
+            CommonTopAppBar(
+                title = character.name,
+                onSettingsClick = onNavigateToSettings,
+                gp = character.gp,
+                onGPClick = { showGPDialog = true }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { showTokenDialog = true }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add Token")
+            }
         },
         bottomBar = {
             NavigationBar {
@@ -68,44 +81,32 @@ fun InventoryScreen(
             }
         }
     ) { paddingValues ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Button(
-                onClick = { showTokenDialog = true },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Add Token")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(character.inventory) { item ->
-                    Card(
-                        modifier = Modifier.fillMaxWidth()
+            items(character.inventory) { item ->
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = item.name,
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = "x${item.quantity}",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
+                        Text(
+                            text = item.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = "x${item.quantity}",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
                     }
                 }
             }
@@ -114,9 +115,18 @@ fun InventoryScreen(
         if (showTokenDialog) {
             AlertDialog(
                 onDismissRequest = { showTokenDialog = false },
-                title = { Text("Select Token Type") },
+                title = { Text("Add to Inventory") },
                 text = {
                     Column {
+                        TextButton(
+                            onClick = {
+                                showTokenDialog = false
+                                showGPDialog = true
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Add GP")
+                        }
                         TokenType.values().forEach { tokenType ->
                             TextButton(
                                 onClick = {
@@ -137,6 +147,50 @@ fun InventoryScreen(
                 confirmButton = {
                     TextButton(onClick = { showTokenDialog = false }) {
                         Text("Cancel")
+                    }
+                }
+            )
+        }
+
+        if (showGPDialog) {
+            AlertDialog(
+                onDismissRequest = { showGPDialog = false },
+                title = { Text("Manage GP") },
+                text = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${character.gp}",
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    if (character.gp > 0) {
+                                        onCharacterUpdated(character.copy(gp = character.gp - 1))
+                                    }
+                                }
+                            ) {
+                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove GP")
+                            }
+                            IconButton(
+                                onClick = {
+                                    onCharacterUpdated(character.copy(gp = character.gp + 1))
+                                }
+                            ) {
+                                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add GP")
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showGPDialog = false }) {
+                        Text("Done")
                     }
                 }
             )

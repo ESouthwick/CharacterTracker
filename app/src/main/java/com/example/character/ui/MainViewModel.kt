@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.character.data.Character
 import com.example.character.data.Skills
+import com.example.character.ui.theme.AppTheme
 
 class MainViewModel : ViewModel() {
     private var _nameInput = mutableStateOf("")
@@ -24,6 +25,10 @@ class MainViewModel : ViewModel() {
     private var _currentScreen = mutableStateOf(Screen.Main)
     val currentScreen: State<Screen>
         get() = _currentScreen
+
+    private var _currentTheme = mutableStateOf(AppTheme.DEFAULT)
+    val currentTheme: State<AppTheme>
+        get() = _currentTheme
 
     fun updateNameInput(newName: String) {
         _nameInput.value = newName
@@ -60,6 +65,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun updateTheme(theme: AppTheme) {
+        _currentTheme.value = theme
+    }
+
     fun navigateTo(screen: Screen) {
         _currentScreen.value = screen
     }
@@ -71,5 +80,6 @@ enum class Screen {
     Characters,
     Skills,
     Inventory,
-    Wounds
+    Wounds,
+    Settings
 }

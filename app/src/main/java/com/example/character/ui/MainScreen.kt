@@ -50,11 +50,13 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
             selectedCharacter?.let { char ->
                 CharacterDetailScreen(
                     character = char,
+                    onCharacterUpdated = { viewModel.updateCharacter(it) },
                     onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
         }
@@ -78,7 +80,8 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
         }
@@ -91,7 +94,8 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
         }
@@ -104,9 +108,17 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) }
+                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
+        }
+        Screen.Settings -> {
+            SettingsScreen(
+                currentTheme = viewModel.currentTheme.value,
+                onThemeChanged = { viewModel.updateTheme(it) },
+                onNavigateBack = { viewModel.navigateTo(Screen.CharacterDetail) }
+            )
         }
     }
 }

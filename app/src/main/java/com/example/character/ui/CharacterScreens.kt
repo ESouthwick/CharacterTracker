@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
 import com.example.character.data.Skill
 import com.example.character.data.Skills
+import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,12 +22,14 @@ fun SkillsScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit
+    onNavigateToWounds: () -> Unit,
+    onNavigateToSettings: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Skills") }
+            CommonTopAppBar(
+                title = character.name,
+                onSettingsClick = onNavigateToSettings
             )
         },
         bottomBar = {
@@ -34,7 +37,7 @@ fun SkillsScreen(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
                     label = { Text("Characters") },
-                    selected = true,
+                    selected = false,
                     onClick = onNavigateToCharacters
                 )
                 NavigationBarItem(
@@ -58,7 +61,7 @@ fun SkillsScreen(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.DateRange, contentDescription = "Skills") },
                     label = { Text("Skills") },
-                    selected = false,
+                    selected = true,
                     onClick = onNavigateToSkills
                 )
             }
