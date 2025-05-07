@@ -85,6 +85,8 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
         Screen.Inventory -> {
             selectedCharacter?.let { char ->
                 InventoryScreen(
+                    character = char,
+                    onCharacterUpdated = { viewModel.updateCharacter(it) },
                     onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
@@ -96,6 +98,8 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
         Screen.Wounds -> {
             selectedCharacter?.let { char ->
                 WoundsScreen(
+                    character = char,
+                    onCharacterUpdated = { viewModel.updateCharacter(it) },
                     onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },

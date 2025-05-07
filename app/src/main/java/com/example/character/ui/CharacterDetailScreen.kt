@@ -31,7 +31,7 @@ fun CharacterDetailScreen(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
                     label = { Text("Characters") },
-                    selected = true,
+                    selected = false,
                     onClick = onNavigateToCharacters
                 )
                 NavigationBarItem(
@@ -43,7 +43,7 @@ fun CharacterDetailScreen(
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
                     label = { Text("Home") },
-                    selected = false,
+                    selected = true,
                     onClick = onNavigateToHome
                 )
                 NavigationBarItem(
@@ -66,12 +66,64 @@ fun CharacterDetailScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = "Gold: ${character.coinPouch}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            // Skills Summary
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNavigateToSkills
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Skills",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Total Level: ${character.skills.melee.level + character.skills.magic.level + character.skills.ranged.level + character.skills.defense.level + character.skills.thieving.level + character.skills.gathering.level + character.skills.crafting.level + character.skills.cooking.level}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            // Wounds Summary
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNavigateToWounds
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Wounds & Deaths",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Wounds: ${character.wounds} | Deaths: ${character.deathTally}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            // Inventory Summary
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNavigateToInventory
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text(
+                        text = "Inventory",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "Items: ${character.inventory.size}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
         }
     }
 } 

@@ -53,6 +53,13 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun updateCharacter(updatedCharacter: Character) {
+        _selectedCharacter.value = updatedCharacter
+        _characters.value = _characters.value.map {
+            if (it.name == updatedCharacter.name) updatedCharacter else it
+        }
+    }
+
     fun navigateTo(screen: Screen) {
         _currentScreen.value = screen
     }

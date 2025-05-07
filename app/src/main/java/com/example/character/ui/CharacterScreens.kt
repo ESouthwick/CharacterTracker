@@ -182,7 +182,7 @@ fun SkillRow(
                         }
                     }
                 ) {
-                    Icon(Icons.Default.Delete, contentDescription = "Remove XP Token")
+                    Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove XP Token")
                 }
                 Text(
                     text = "${skill.xpTokens} XP",
@@ -190,10 +190,15 @@ fun SkillRow(
                 )
                 IconButton(
                     onClick = {
-                        onSkillUpdated(skill.copy(xpTokens = skill.xpTokens + 1))
+                        if (skill.xpTokens < 3) {
+                            onSkillUpdated(skill.copy(xpTokens = skill.xpTokens + 1))
+                        } else {
+                            // Level up when XP tokens reach 3
+                            onSkillUpdated(skill.copy(level = skill.level + 1, xpTokens = 0))
+                        }
                     }
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add XP Token")
+                    Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add XP Token")
                 }
             }
         }
