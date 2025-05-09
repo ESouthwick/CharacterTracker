@@ -18,6 +18,7 @@ import com.example.character.ui.components.CommonTopAppBar
 fun SkillsScreen(
     character: Character,
     onSkillUpdated: (Skills) -> Unit,
+    onCharacterUpdated: (Character) -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
@@ -25,11 +26,15 @@ fun SkillsScreen(
     onNavigateToWounds: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
+    var showGPDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             CommonTopAppBar(
                 title = character.name,
-                onSettingsClick = onNavigateToSettings
+                onSettingsClick = onNavigateToSettings,
+                gp = character.gp,
+                onGPClick = { showGPDialog = true }
             )
         },
         bottomBar = {
@@ -138,6 +143,50 @@ fun SkillsScreen(
                 }
             )
         }
+
+        if (showGPDialog) {
+            AlertDialog(
+                onDismissRequest = { showGPDialog = false },
+                title = { Text("Manage GP") },
+                text = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${character.gp}",
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    if (character.gp > 0) {
+                                        onCharacterUpdated(character.copy(gp = character.gp - 1))
+                                    }
+                                }
+                            ) {
+                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove GP")
+                            }
+                            IconButton(
+                                onClick = {
+                                    onCharacterUpdated(character.copy(gp = character.gp + 1))
+                                }
+                            ) {
+                                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add GP")
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showGPDialog = false }) {
+                        Text("Done")
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -193,7 +242,7 @@ fun SkillRow(
                 )
                 IconButton(
                     onClick = {
-                        if (skill.xpTokens < 3) {
+                        if (skill.xpTokens < 2) {
                             onSkillUpdated(skill.copy(xpTokens = skill.xpTokens + 1))
                         } else {
                             // Level up when XP tokens reach 3

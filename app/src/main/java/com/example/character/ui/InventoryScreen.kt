@@ -1,17 +1,18 @@
 package com.example.character.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
-import com.example.character.data.Item
+import com.example.character.data.InventoryItem
 import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,9 +27,12 @@ fun InventoryScreen(
     onNavigateToWounds: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
-    var showTokenDialog by remember { mutableStateOf(false) }
     var showGPDialog by remember { mutableStateOf(false) }
-    var selectedTokenType by remember { mutableStateOf<TokenType?>(null) }
+    var showIngredientDialog by remember { mutableStateOf(false) }
+    var showMaterialDialog by remember { mutableStateOf(false) }
+
+    val ingredients = listOf("Fish", "Meat", "Herb", "Vegetable", "Egg", "Flour", "Fruit")
+    val materials = listOf("Wood", "Stone", "Leather", "Thread", "Metal")
 
     Scaffold(
         topBar = {
@@ -40,10 +44,18 @@ fun InventoryScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { showTokenDialog = true }
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add Token")
+            Column {
+                FloatingActionButton(
+                    onClick = { showIngredientDialog = true },
+                    modifier = Modifier.padding(bottom = 8.dp)
+                ) {
+                    Icon(Icons.Default.DateRange, contentDescription = "Add Ingredient")
+                }
+                FloatingActionButton(
+                    onClick = { showMaterialDialog = true }
+                ) {
+                    Icon(Icons.Default.Build, contentDescription = "Add Material")
+                }
             }
         },
         bottomBar = {
@@ -81,75 +93,94 @@ fun InventoryScreen(
             }
         }
     ) { paddingValues ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(16.dp)
         ) {
-            items(character.inventory) { item ->
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
+            // Display current inventory in a 3-column grid
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                val tokenCounts = character.inventory.groupBy { it.name }
+                    .mapValues { it.value.sumOf { item -> item.quantity } }
+                
+                items(tokenCounts.toList().size) { index ->
+                    val (name, count) = tokenCounts.toList()[index]
+                    Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                            .aspectRatio(1f)
                     ) {
-                        Text(
-                            text = item.name,
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "x${item.quantity}",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-            }
-        }
-
-        if (showTokenDialog) {
-            AlertDialog(
-                onDismissRequest = { showTokenDialog = false },
-                title = { Text("Add to Inventory") },
-                text = {
-                    Column {
-                        TextButton(
-                            onClick = {
-                                showTokenDialog = false
-                                showGPDialog = true
-                            },
-                            modifier = Modifier.fillMaxWidth()
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Text("Add GP")
-                        }
-                        TokenType.values().forEach { tokenType ->
-                            TextButton(
-                                onClick = {
-                                    selectedTokenType = tokenType
-                                    showTokenDialog = false
-                                    // Add 5 tokens of the selected type
-                                    val newItem = Item(tokenType.name, 5)
-                                    val updatedInventory = character.inventory + newItem
-                                    onCharacterUpdated(character.copy(inventory = updatedInventory))
-                                },
-                                modifier = Modifier.fillMaxWidth()
+                            Text(
+                                text = name,
+                                style = MaterialTheme.typography.titleMedium,
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = "x$count",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(tokenType.name)
+                                IconButton(
+                                    onClick = {
+                                        val currentInventory = character.inventory.toMutableList()
+                                        val existingItem = currentInventory.find { it.name == name }
+                                        if (existingItem != null) {
+                                            if (existingItem.quantity > 1) {
+                                                currentInventory[currentInventory.indexOf(existingItem)] = 
+                                                    existingItem.copy(quantity = existingItem.quantity - 1)
+                                            } else {
+                                                currentInventory.remove(existingItem)
+                                            }
+                                            onCharacterUpdated(character.copy(inventory = currentInventory))
+                                        }
+                                    },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.KeyboardArrowDown,
+                                        contentDescription = "Decrease",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                                IconButton(
+                                    onClick = {
+                                        val currentInventory = character.inventory.toMutableList()
+                                        val existingItem = currentInventory.find { it.name == name }
+                                        if (existingItem != null) {
+                                            currentInventory[currentInventory.indexOf(existingItem)] = 
+                                                existingItem.copy(quantity = existingItem.quantity + 1)
+                                            onCharacterUpdated(character.copy(inventory = currentInventory))
+                                        }
+                                    },
+                                    modifier = Modifier.size(24.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.KeyboardArrowUp,
+                                        contentDescription = "Increase",
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
                             }
                         }
                     }
-                },
-                confirmButton = {
-                    TextButton(onClick = { showTokenDialog = false }) {
-                        Text("Cancel")
-                    }
                 }
-            )
+            }
         }
 
         if (showGPDialog) {
@@ -191,6 +222,80 @@ fun InventoryScreen(
                 confirmButton = {
                     TextButton(onClick = { showGPDialog = false }) {
                         Text("Done")
+                    }
+                }
+            )
+        }
+
+        if (showIngredientDialog) {
+            AlertDialog(
+                onDismissRequest = { showIngredientDialog = false },
+                title = { Text("Add Ingredient") },
+                text = {
+                    Column {
+                        ingredients.forEach { ingredient ->
+                            Button(
+                                onClick = {
+                                    val currentInventory = character.inventory.toMutableList()
+                                    val existingItem = currentInventory.find { it.name == ingredient }
+                                    if (existingItem != null) {
+                                        currentInventory[currentInventory.indexOf(existingItem)] = 
+                                            existingItem.copy(quantity = existingItem.quantity + 1)
+                                    } else {
+                                        currentInventory.add(InventoryItem(ingredient, 1))
+                                    }
+                                    onCharacterUpdated(character.copy(inventory = currentInventory))
+                                    showIngredientDialog = false
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp)
+                            ) {
+                                Text(ingredient)
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showIngredientDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+
+        if (showMaterialDialog) {
+            AlertDialog(
+                onDismissRequest = { showMaterialDialog = false },
+                title = { Text("Add Material") },
+                text = {
+                    Column {
+                        materials.forEach { material ->
+                            Button(
+                                onClick = {
+                                    val currentInventory = character.inventory.toMutableList()
+                                    val existingItem = currentInventory.find { it.name == material }
+                                    if (existingItem != null) {
+                                        currentInventory[currentInventory.indexOf(existingItem)] = 
+                                            existingItem.copy(quantity = existingItem.quantity + 1)
+                                    } else {
+                                        currentInventory.add(InventoryItem(material, 1))
+                                    }
+                                    onCharacterUpdated(character.copy(inventory = currentInventory))
+                                    showMaterialDialog = false
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp)
+                            ) {
+                                Text(material)
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showMaterialDialog = false }) {
+                        Text("Cancel")
                     }
                 }
             )

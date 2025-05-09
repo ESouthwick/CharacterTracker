@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.character.data.Character
 
 @Composable
 fun MainScreen(viewModel: MainViewModel = viewModel()) {
@@ -38,7 +39,12 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
-                        onClick = { viewModel.createCharacter() },
+                        onClick = {
+                            if (nameInput.isNotBlank()) {
+                                val newCharacter = Character(name = nameInput)
+                                viewModel.createCharacter(newCharacter)
+                            }
+                        },
                         enabled = nameInput.isNotBlank()
                     ) {
                         Text("Create Character")
@@ -68,14 +74,18 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                 onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                 onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
                 onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
-                onCharacterSelected = { viewModel.selectCharacter(it) }
+                onCharacterSelected = { viewModel.selectCharacter(it) },
+                onCreateCharacter = { viewModel.createCharacter(it) }
             )
         }
         Screen.Skills -> {
             selectedCharacter?.let { char ->
                 SkillsScreen(
                     character = char,
-                    onSkillUpdated = { viewModel.updateSkills(it) },
+                    onSkillUpdated = { newSkills ->
+                        viewModel.updateCharacter(char.copy(skills = newSkills))
+                    },
+                    onCharacterUpdated = { viewModel.updateCharacter(it) },
                     onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },

@@ -4,12 +4,16 @@ import android.R.attr.name
 
 data class Character(
     val name: String,
+    val skills: Skills = Skills(),
+    val inventory: List<InventoryItem> = emptyList(),
     val wounds: Int = 0,
     val deathTally: Int = 0,
-    val inventory: List<Item> = emptyList(),
-    val gp: Int = 0,
-    val skills: Skills = Skills()
-)
+    val gp: Int = 0
+) {
+    val totalLevel: Int
+        get() = skills.melee.level + skills.magic.level + skills.ranged.level + skills.defense.level +
+                skills.thieving.level + skills.gathering.level + skills.crafting.level + skills.cooking.level
+}
 
 data class Skills(
     val melee: Skill = Skill(),

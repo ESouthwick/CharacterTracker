@@ -10,67 +10,55 @@ import com.example.character.data.Skills
 import com.example.character.ui.theme.AppTheme
 
 class MainViewModel : ViewModel() {
-    private var _nameInput = mutableStateOf("")
-    val nameInput: State<String>
-        get() = _nameInput
+    private val _nameInput = mutableStateOf("")
+    val nameInput: State<String> = _nameInput
 
-    private var _characters = mutableStateOf<List<Character>>(emptyList())
-    val characters: State<List<Character>>
-        get() = _characters
+    private val _characters = mutableStateOf<List<Character>>(emptyList())
+    val characters: State<List<Character>> = _characters
 
-    private var _selectedCharacter = mutableStateOf<Character?>(null)
-    val selectedCharacter: State<Character?>
-        get() = _selectedCharacter
+    private val _selectedCharacter = mutableStateOf<Character?>(null)
+    val selectedCharacter: State<Character?> = _selectedCharacter
 
-    private var _currentScreen = mutableStateOf(Screen.Main)
-    val currentScreen: State<Screen>
-        get() = _currentScreen
+    private val _currentScreen = mutableStateOf(Screen.Main)
+    val currentScreen: State<Screen> = _currentScreen
 
-    private var _currentTheme = mutableStateOf(AppTheme.DEFAULT)
-    val currentTheme: State<AppTheme>
-        get() = _currentTheme
+    private val _currentTheme = mutableStateOf(AppTheme.DEFAULT)
+    val currentTheme: State<AppTheme> = _currentTheme
 
-    fun updateNameInput(newName: String) {
-        _nameInput.value = newName
+    fun updateNameInput(input: String) {
+        _nameInput.value = input
     }
 
-    fun createCharacter() {
-        if (_nameInput.value.isNotBlank()) {
-            val newCharacter = Character(_nameInput.value)
-            _characters.value = _characters.value + newCharacter
-            _selectedCharacter.value = newCharacter
-            _nameInput.value = ""
-            _currentScreen.value = Screen.CharacterDetail
-        }
+    fun createCharacter(character: Character) {
+        _characters.value = _characters.value + character
+        _selectedCharacter.value = character
+        navigateTo(Screen.CharacterDetail)
     }
 
     fun selectCharacter(character: Character) {
         _selectedCharacter.value = character
-        _currentScreen.value = Screen.CharacterDetail
+        navigateTo(Screen.CharacterDetail)
+    }
+
+    fun updateCharacter(character: Character) {
+        _selectedCharacter.value = character
+        _characters.value = _characters.value.map { 
+            if (it.name == character.name) character else it 
+        }
     }
 
     fun updateSkills(skills: Skills) {
         _selectedCharacter.value?.let { character ->
-            _selectedCharacter.value = character.copy(skills = skills)
-            _characters.value = _characters.value.map {
-                if (it.name == character.name) character.copy(skills = skills) else it
-            }
+            updateCharacter(character.copy(skills = skills))
         }
-    }
-
-    fun updateCharacter(updatedCharacter: Character) {
-        _selectedCharacter.value = updatedCharacter
-        _characters.value = _characters.value.map {
-            if (it.name == updatedCharacter.name) updatedCharacter else it
-        }
-    }
-
-    fun updateTheme(theme: AppTheme) {
-        _currentTheme.value = theme
     }
 
     fun navigateTo(screen: Screen) {
         _currentScreen.value = screen
+    }
+
+    fun updateTheme(theme: AppTheme) {
+        _currentTheme.value = theme
     }
 }
 
