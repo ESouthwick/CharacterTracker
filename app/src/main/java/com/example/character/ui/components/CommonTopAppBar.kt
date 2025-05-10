@@ -7,8 +7,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.character.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,7 +32,11 @@ fun CommonTopAppBar(
         },
         navigationIcon = {
             IconButton(onClick = onSettingsClick) {
-                Icon(Icons.Default.Settings, contentDescription = "Settings")
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_settings),
+                    contentDescription = "Settings",
+                    tint = null
+                )
             }
         },
         actions = {
@@ -39,8 +45,13 @@ fun CommonTopAppBar(
                     onClick = onGPClick,
                     modifier = Modifier.padding(end = 8.dp)
                 ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_coinpouch),
+                        contentDescription = "",
+                        tint = null
+                    )
                     Text(
-                        text = "GP: $gp",
+                        text = " : $gp",
                         style = MaterialTheme.typography.titleMedium
                     )
                 }

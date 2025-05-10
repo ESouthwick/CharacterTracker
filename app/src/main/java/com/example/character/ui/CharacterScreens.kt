@@ -7,10 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
 import com.example.character.data.Skill
 import com.example.character.data.Skills
+import com.example.character.R
 import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -190,6 +192,7 @@ fun SkillsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SkillRow(
     name: String,
@@ -223,6 +226,7 @@ fun SkillRow(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+        }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -236,8 +240,13 @@ fun SkillRow(
                 ) {
                     Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove XP Token")
                 }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_xpl),
+                    contentDescription = "XP",
+                    tint = null
+                )
                 Text(
-                    text = "${skill.xpTokens} XP",
+                    text = "${skill.xpTokens} ",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 IconButton(
@@ -255,7 +264,6 @@ fun SkillRow(
             }
         }
     }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

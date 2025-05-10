@@ -7,9 +7,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.character.R
 import com.example.character.data.Character
 import com.example.character.ui.components.CommonTopAppBar
+import com.example.character.ui.components.CommonNavBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,38 +38,14 @@ fun CharacterDetailScreen(
             )
         },
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
-                    label = { Text("Characters") },
-                    selected = false,
-                    onClick = onNavigateToCharacters
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Warning, contentDescription = "Wounds") },
-                    label = { Text("Wounds") },
-                    selected = false,
-                    onClick = onNavigateToWounds
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
-                    selected = true,
-                    onClick = onNavigateToHome
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "Inventory") },
-                    label = { Text("Inventory") },
-                    selected = false,
-                    onClick = onNavigateToInventory
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.DateRange, contentDescription = "Skills") },
-                    label = { Text("Skills") },
-                    selected = false,
-                    onClick = onNavigateToSkills
-                )
-            }
+            CommonNavBar(
+                currentScreen = Screen.CharacterDetail,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToCharacters = onNavigateToCharacters,
+                onNavigateToSkills = onNavigateToSkills,
+                onNavigateToInventory = onNavigateToInventory,
+                onNavigateToWounds = onNavigateToWounds
+            )
         }
     ) { paddingValues ->
         Column(
@@ -103,69 +82,117 @@ fun CharacterDetailScreen(
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Build, contentDescription = "Melee")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_attack),
+                                    contentDescription = "Melee",
+                                    tint = null
+                                )
                                 Text("${character.skills.melee.level}")
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.CheckCircle, contentDescription = "Magic")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_magic),
+                                    contentDescription = "Magic",
+                                    tint = null
+                                )
                                 Text("${character.skills.magic.level}")
                             }
+                        }
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Phone, contentDescription = "Ranged")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_ranged),
+                                    contentDescription = "Ranged",
+                                    tint = null
+                                )
                                 Text("${character.skills.ranged.level}")
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Email, contentDescription = "Defense")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_defense),
+                                    contentDescription = "Defense",
+                                    tint = null
+                                )
                                 Text("${character.skills.defense.level}")
                             }
                         }
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Lock, contentDescription = "Thieving")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_thieving),
+                                    contentDescription = "Thieving",
+                                    tint = null
+                                )
                                 Text("${character.skills.thieving.level}")
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.ShoppingCart, contentDescription = "Gathering")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_gathering),
+                                    contentDescription = "Gathering",
+                                    tint = null
+                                )
                                 Text("${character.skills.gathering.level}")
                             }
+                        }
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.weight(1f)
+                        ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Build, contentDescription = "Crafting")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_crafting),
+                                    contentDescription = "Crafting",
+                                    tint = null
+                                )
                                 Text("${character.skills.crafting.level}")
                             }
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                Icon(Icons.Default.Notifications, contentDescription = "Cooking")
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_cooking),
+                                    contentDescription = "Cooking",
+                                    tint = null
+                                )
                                 Text("${character.skills.cooking.level}")
                             }
                         }
