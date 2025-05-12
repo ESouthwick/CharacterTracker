@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
+import com.example.character.ui.components.CommonNavBar
 import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,38 +32,14 @@ fun WoundsScreen(
             )
         },
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
-                    label = { Text("Characters") },
-                    selected = false,
-                    onClick = onNavigateToCharacters
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Warning, contentDescription = "Wounds") },
-                    label = { Text("Wounds") },
-                    selected = true,
-                    onClick = onNavigateToWounds
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
-                    selected = false,
-                    onClick = onNavigateToHome
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "Inventory") },
-                    label = { Text("Inventory") },
-                    selected = false,
-                    onClick = onNavigateToInventory
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.DateRange, contentDescription = "Skills") },
-                    label = { Text("Skills") },
-                    selected = false,
-                    onClick = onNavigateToSkills
-                )
-            }
+            CommonNavBar(
+                currentScreen = Screen.Wounds,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToCharacters = onNavigateToCharacters,
+                onNavigateToSkills = onNavigateToSkills,
+                onNavigateToInventory = onNavigateToInventory,
+                onNavigateToWounds = onNavigateToWounds
+            )
         }
     ) { paddingValues ->
         Column(

@@ -82,9 +82,6 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
             selectedCharacter?.let { char ->
                 SkillsScreen(
                     character = char,
-                    onSkillUpdated = { newSkills ->
-                        viewModel.updateCharacter(char.copy(skills = newSkills))
-                    },
                     onCharacterUpdated = { viewModel.updateCharacter(it) },
                     onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },

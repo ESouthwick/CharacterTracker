@@ -9,10 +9,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.character.R
 import com.example.character.data.Character
 import com.example.character.data.InventoryItem
+import com.example.character.ui.components.CommonNavBar
 import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,38 +62,14 @@ fun InventoryScreen(
             }
         },
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
-                    label = { Text("Characters") },
-                    selected = false,
-                    onClick = onNavigateToCharacters
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Warning, contentDescription = "Wounds") },
-                    label = { Text("Wounds") },
-                    selected = false,
-                    onClick = onNavigateToWounds
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
-                    selected = false,
-                    onClick = onNavigateToHome
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "Inventory") },
-                    label = { Text("Inventory") },
-                    selected = true,
-                    onClick = onNavigateToInventory
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.DateRange, contentDescription = "Skills") },
-                    label = { Text("Skills") },
-                    selected = false,
-                    onClick = onNavigateToSkills
-                )
-            }
+            CommonNavBar(
+                currentScreen = Screen.Inventory,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToCharacters = onNavigateToCharacters,
+                onNavigateToSkills = onNavigateToSkills,
+                onNavigateToInventory = onNavigateToInventory,
+                onNavigateToWounds = onNavigateToWounds
+            )
         }
     ) { paddingValues ->
         Column(
@@ -123,18 +102,37 @@ fun InventoryScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
+                            Icon(
+                                painter = painterResource(
+                                    id = when (name) {
+                                        "Fish" -> R.drawable.ic_fish
+                                        "Meat" -> R.drawable.ic_meat
+                                        "Herb" -> R.drawable.ic_herb
+                                        "Vegetable" -> R.drawable.ic_vegetable
+                                        "Egg" -> R.drawable.ic_egg
+                                        "Flour" -> R.drawable.ic_flour
+                                        "Fruit" -> R.drawable.ic_fruit
+                                        "Wood" -> R.drawable.ic_wood
+                                        "Stone" -> R.drawable.ic_stone
+                                        "Leather" -> R.drawable.ic_leather
+                                        "Thread" -> R.drawable.ic_thread
+                                        "Metal" -> R.drawable.ic_metal
+                                        else -> R.drawable.ic_inventory
+                                    }
+                                ),
+                                contentDescription = name,
+                                modifier = Modifier.size(48.dp),
+                                tint = null
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
                                 text = name,
                                 style = MaterialTheme.typography.titleMedium,
                                 textAlign = TextAlign.Center
                             )
-                            Text(
-                                text = "x$count",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
                             Row(
-                                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                verticalAlignment = Alignment.CenterVertically
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
                             ) {
                                 IconButton(
                                     onClick = {
@@ -142,7 +140,7 @@ fun InventoryScreen(
                                         val existingItem = currentInventory.find { it.name == name }
                                         if (existingItem != null) {
                                             if (existingItem.quantity > 1) {
-                                                currentInventory[currentInventory.indexOf(existingItem)] = 
+                                                currentInventory[currentInventory.indexOf(existingItem)] =
                                                     existingItem.copy(quantity = existingItem.quantity - 1)
                                             } else {
                                                 currentInventory.remove(existingItem)
@@ -158,6 +156,10 @@ fun InventoryScreen(
                                         modifier = Modifier.size(16.dp)
                                     )
                                 }
+                                Text(
+                                    text = "x$count",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
                                 IconButton(
                                     onClick = {
                                         val currentInventory = character.inventory.toMutableList()
@@ -251,7 +253,29 @@ fun InventoryScreen(
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp)
                             ) {
-                                Text(ingredient)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = when (ingredient) {
+                                                "Fish" -> R.drawable.ic_fish
+                                                "Meat" -> R.drawable.ic_meat
+                                                "Herb" -> R.drawable.ic_herb
+                                                "Vegetable" -> R.drawable.ic_vegetable
+                                                "Egg" -> R.drawable.ic_egg
+                                                "Flour" -> R.drawable.ic_flour
+                                                "Fruit" -> R.drawable.ic_fruit
+                                                else -> R.drawable.ic_inventory
+                                            }
+                                        ),
+                                        contentDescription = ingredient,
+                                        modifier = Modifier.size(24.dp),
+                                        tint = null
+                                    )
+                                    Text(ingredient)
+                                }
                             }
                         }
                     }
@@ -288,7 +312,27 @@ fun InventoryScreen(
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp)
                             ) {
-                                Text(material)
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = when (material) {
+                                                "Wood" -> R.drawable.ic_wood
+                                                "Stone" -> R.drawable.ic_stone
+                                                "Leather" -> R.drawable.ic_leather
+                                                "Thread" -> R.drawable.ic_thread
+                                                "Metal" -> R.drawable.ic_metal
+                                                else -> R.drawable.ic_inventory
+                                            }
+                                        ),
+                                        contentDescription = material,
+                                        modifier = Modifier.size(24.dp),
+                                        tint = null
+                                    )
+                                    Text(material)
+                                }
                             }
                         }
                     }

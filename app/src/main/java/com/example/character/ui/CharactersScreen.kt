@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.character.data.Character
+import com.example.character.ui.components.CommonNavBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,38 +43,14 @@ fun CharactersScreen(
             }
         },
         bottomBar = {
-            NavigationBar {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
-                    label = { Text("Characters") },
-                    selected = true,
-                    onClick = onNavigateToCharacters
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Warning, contentDescription = "Wounds") },
-                    label = { Text("Wounds") },
-                    selected = false,
-                    onClick = onNavigateToWounds
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
-                    label = { Text("Home") },
-                    selected = false,
-                    onClick = onNavigateToHome
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.ShoppingCart, contentDescription = "Inventory") },
-                    label = { Text("Inventory") },
-                    selected = false,
-                    onClick = onNavigateToInventory
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.DateRange, contentDescription = "Skills") },
-                    label = { Text("Skills") },
-                    selected = false,
-                    onClick = onNavigateToSkills
-                )
-            }
+            CommonNavBar(
+                currentScreen = Screen.Characters,
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToCharacters = onNavigateToCharacters,
+                onNavigateToSkills = onNavigateToSkills,
+                onNavigateToInventory = onNavigateToInventory,
+                onNavigateToWounds = onNavigateToWounds
+            )
         }
     ) { paddingValues ->
         LazyColumn(
