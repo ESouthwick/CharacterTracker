@@ -217,8 +217,8 @@ fun CharacterDetailScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text("Current Wounds: ${character.wounds}")
-                        Text("Death Tally: ${character.deathTally}")
+                        Text("Current Wounds: ${character.health.wounds}")
+                        Text("Death Tally: ${character.health.deathTally}")
                     }
                 }
             }

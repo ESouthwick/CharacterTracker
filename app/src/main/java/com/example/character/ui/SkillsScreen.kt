@@ -124,7 +124,6 @@ fun SkillsScreen(
                         }
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(4.dp),
-                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             IconButton(
                                 onClick = {

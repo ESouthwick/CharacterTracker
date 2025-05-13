@@ -1,14 +1,20 @@
 package com.example.character.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.character.R
 import com.example.character.data.Character
+import com.example.character.data.Health
 import com.example.character.ui.components.CommonNavBar
 import com.example.character.ui.components.CommonTopAppBar
 
@@ -24,11 +30,15 @@ fun WoundsScreen(
     onNavigateToWounds: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
+    var showGPDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             CommonTopAppBar(
                 title = character.name,
-                onSettingsClick = onNavigateToSettings
+                onSettingsClick = onNavigateToSettings,
+                gp = character.gp,
+                onGPClick = { showGPDialog = true }
             )
         },
         bottomBar = {
@@ -42,119 +52,101 @@ fun WoundsScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // Wound Tracker
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            items(
+                listOf(
+                    Triple("Wounds", character.health.wounds, R.drawable.ic_hit),
+                    Triple("Deaths", character.health.deathTally, R.drawable.ic_skull),
+                )
+            ) { (name, data, iconRes) ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(1.125f)
                 ) {
-                    Text(
-                        text = "Wounds",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Row(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
-                        IconButton(
-                            onClick = {
-                                if (character.wounds > 0) {
-                                    onCharacterUpdated(character.copy(wounds = character.wounds - 1))
-                                }
-                            }
-                        ) {
-                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove Wound")
-                        }
-                        Text(
-                            text = "${character.wounds}",
-                            style = MaterialTheme.typography.headlineMedium
+                        Icon(
+                            painter = painterResource(id = iconRes),
+                            contentDescription = name,
+                            tint = null
                         )
-                        IconButton(
-                            onClick = {
-                                onCharacterUpdated(character.copy(wounds = character.wounds + 1))
-                            }
-                        ) {
-                            Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add Wound")
-                        }
-                    }
-                    // Display hitsplat icons for each wound
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        repeat(character.wounds) {
-                            Icon(
-                                Icons.Default.Warning,
-                                contentDescription = "Wound",
-                                tint = MaterialTheme.colorScheme.error
-                            )
-                        }
-                    }
-                }
-            }
-
-            // Death Tracker
-            Card(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Death Tally",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Row(
-                        modifier = Modifier.padding(vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        IconButton(
-                            onClick = {
-                                if (character.deathTally > 0) {
-                                    onCharacterUpdated(character.copy(deathTally = character.deathTally - 1))
-                                }
-                            }
-                        ) {
-                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove Death")
-                        }
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "${character.deathTally}",
-                            style = MaterialTheme.typography.headlineMedium
+                            text = name,
+                            style = MaterialTheme.typography.titleMedium
                         )
-                        IconButton(
-                            onClick = {
-                                onCharacterUpdated(character.copy(deathTally = character.deathTally + 1))
-                            }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
                         ) {
-                            Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add Death")
-                        }
-                    }
-                    // Display skull icons for each death
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        repeat(character.deathTally) {
-                            Icon(
-                                Icons.Default.Info,
-                                contentDescription = "Death",
-                                tint = MaterialTheme.colorScheme.error
+                            IconButton(
+                                onClick = {
+                                    val updatedHealth: Health = when (name) {
+                                        "Wounds" -> {
+                                            val currentWounds = character.health.wounds
+                                            if (currentWounds > 0) {
+                                                character.health.copy(wounds = currentWounds - 1)
+                                            } else {
+                                                character.health
+                                            }
+                                        }
+                                        "Deaths" -> {
+                                            val currentDeaths = character.health.deathTally
+                                            if (currentDeaths > 0) {
+                                                character.health.copy(deathTally = currentDeaths - 1)
+                                            } else {
+                                                character.health
+                                            }
+                                        }
+                                        else -> character.health
+                                    }
+                                    onCharacterUpdated(character.copy(health = updatedHealth))
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Default.KeyboardArrowDown,
+                                    contentDescription = "Remove ${name.lowercase()}",
+                                    modifier = Modifier.size(36.dp)
+                                )
+                            }
+                            Text(
+                                text = "$data",
+                                style = MaterialTheme.typography.bodyLarge
                             )
+                            IconButton(
+                                onClick = {
+                                    val updatedHealth: Health = when (name) {
+                                        "Wounds" -> character.health.copy(wounds = character.health.wounds + 1)
+                                        "Deaths" -> character.health.copy(deathTally = character.health.deathTally + 1)
+                                        else -> character.health
+                                    }
+                                    onCharacterUpdated(character.copy(health = updatedHealth))
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Default.KeyboardArrowUp,
+                                    contentDescription = "Add ${name.lowercase()}",
+                                    modifier = Modifier.size(36.dp)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
     }
-} 
+}

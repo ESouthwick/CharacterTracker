@@ -6,8 +6,7 @@ data class Character(
     val name: String,
     val skills: Skills = Skills(),
     val inventory: List<InventoryItem> = emptyList(),
-    val wounds: Int = 0,
-    val deathTally: Int = 0,
+    val health: Health = Health(),
     val gp: Int = 0
 ) {
     val totalLevel: Int
@@ -24,6 +23,11 @@ data class Skills(
     val gathering: Skill = Skill(),
     val crafting: Skill = Skill(),
     val cooking: Skill = Skill()
+)
+
+data class Health(
+    val wounds: Int = 0,
+    val deathTally: Int = 0,
 )
 
 data class Skill(
