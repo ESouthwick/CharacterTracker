@@ -63,14 +63,14 @@ fun WoundsScreen(
         ) {
             items(
                 listOf(
-                    Triple("Wounds", character.health.wounds, R.drawable.ic_hit),
-                    Triple("Deaths", character.health.deathTally, R.drawable.ic_skull),
+                    Triple("Wounds", character.health.wounds, R.drawable.ic_vengeance),
+                    Triple("Deaths", character.health.deathTally, R.drawable.ic_vengeanceo),
                 )
             ) { (name, data, iconRes) ->
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .aspectRatio(1.125f)
+                        .aspectRatio(1.5f)
                 ) {
                     Column(
                         modifier = Modifier
@@ -147,6 +147,49 @@ fun WoundsScreen(
                     }
                 }
             }
+        }
+        if (showGPDialog) {
+            AlertDialog(
+                onDismissRequest = { showGPDialog = false },
+                title = { Text("Manage GP") },
+                text = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "${character.gp}",
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            IconButton(
+                                onClick = {
+                                    if (character.gp > 0) {
+                                        onCharacterUpdated(character.copy(gp = character.gp - 1))
+                                    }
+                                }
+                            ) {
+                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove GP")
+                            }
+                            IconButton(
+                                onClick = {
+                                    onCharacterUpdated(character.copy(gp = character.gp + 1))
+                                }
+                            ) {
+                                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add GP")
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showGPDialog = false }) {
+                        Text("Done")
+                    }
+                }
+            )
         }
     }
 }

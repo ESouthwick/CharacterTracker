@@ -23,7 +23,11 @@ fun CommonNavBar(
 ) {
     NavigationBar {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
+            icon = {Icon(
+                painter = painterResource(id = R.drawable.ic_group),
+                contentDescription = "Wounds",
+                tint = null
+            )},
             label = { Text("Characters") },
             selected = currentScreen == Screen.Characters,
             onClick = onNavigateToCharacters
@@ -41,7 +45,13 @@ fun CommonNavBar(
             onClick = onNavigateToWounds
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+            icon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_house),
+                    contentDescription = "Wounds",
+                    tint = null
+                )
+            },
             label = { Text("Home") },
             selected = currentScreen == Screen.CharacterDetail,
             onClick = onNavigateToHome
@@ -49,7 +59,7 @@ fun CommonNavBar(
         NavigationBarItem(
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_inventory),
+                    painter = painterResource(id = R.drawable.ic_baga),
                     contentDescription = "Inventory",
                     tint = null
                 )
@@ -64,7 +74,7 @@ fun CommonNavBar(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_skills),
+                        painter = painterResource(id = R.drawable.ic_bar),
                         contentDescription = "Skills",
                         tint = null
                     )

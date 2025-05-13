@@ -43,7 +43,7 @@ fun CommonTopAppBar(
                     modifier = Modifier.padding(end = 8.dp)
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_coinpouch),
+                        painter = painterResource(id = R.drawable.ic_gpbag),
                         contentDescription = "",
                         tint = null
                     )

@@ -107,13 +107,13 @@ fun InventoryScreen(
                                     id = when (name) {
                                         "Fish" -> R.drawable.ic_fish
                                         "Meat" -> R.drawable.ic_meat
-                                        "Herb" -> R.drawable.ic_herb
+                                        "Herb" -> R.drawable.ic_herbs
                                         "Vegetable" -> R.drawable.ic_vegetable
                                         "Egg" -> R.drawable.ic_egg
                                         "Flour" -> R.drawable.ic_flour
                                         "Fruit" -> R.drawable.ic_fruit
                                         "Wood" -> R.drawable.ic_wood
-                                        "Stone" -> R.drawable.ic_stone
+                                        "Stone" -> R.drawable.ic_stones
                                         "Leather" -> R.drawable.ic_leather
                                         "Thread" -> R.drawable.ic_thread
                                         "Metal" -> R.drawable.ic_metal
@@ -262,7 +262,7 @@ fun InventoryScreen(
                                             id = when (ingredient) {
                                                 "Fish" -> R.drawable.ic_fish
                                                 "Meat" -> R.drawable.ic_meat
-                                                "Herb" -> R.drawable.ic_herb
+                                                "Herb" -> R.drawable.ic_herbs
                                                 "Vegetable" -> R.drawable.ic_vegetable
                                                 "Egg" -> R.drawable.ic_egg
                                                 "Flour" -> R.drawable.ic_flour
@@ -271,7 +271,7 @@ fun InventoryScreen(
                                             }
                                         ),
                                         contentDescription = ingredient,
-                                        modifier = Modifier.size(24.dp),
+                                        modifier = Modifier.size(36.dp),
                                         tint = null
                                     )
                                     Text(ingredient)
@@ -320,7 +320,7 @@ fun InventoryScreen(
                                         painter = painterResource(
                                             id = when (material) {
                                                 "Wood" -> R.drawable.ic_wood
-                                                "Stone" -> R.drawable.ic_stone
+                                                "Stone" -> R.drawable.ic_stones
                                                 "Leather" -> R.drawable.ic_leather
                                                 "Thread" -> R.drawable.ic_thread
                                                 "Metal" -> R.drawable.ic_metal
