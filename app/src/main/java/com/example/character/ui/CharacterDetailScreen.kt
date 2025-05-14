@@ -23,7 +23,7 @@ fun CharacterDetailScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit,
+    onNavigateToHealth: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     var showGPDialog by remember { mutableStateOf(false) }
@@ -44,7 +44,7 @@ fun CharacterDetailScreen(
                 onNavigateToCharacters = onNavigateToCharacters,
                 onNavigateToSkills = onNavigateToSkills,
                 onNavigateToInventory = onNavigateToInventory,
-                onNavigateToWounds = onNavigateToWounds
+                onNavigateToHealth = onNavigateToHealth
             )
         }
     ) { paddingValues ->
@@ -203,7 +203,7 @@ fun CharacterDetailScreen(
             // Wounds Summary
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onNavigateToWounds
+                onClick = onNavigateToHealth
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),

@@ -1,13 +1,13 @@
 package com.example.character.ui.components
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import com.example.character.R
 import com.example.character.ui.Screen
 
@@ -19,13 +19,13 @@ fun CommonNavBar(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit
+    onNavigateToHealth: () -> Unit
 ) {
     NavigationBar {
         NavigationBarItem(
             icon = {Icon(
                 painter = painterResource(id = R.drawable.ic_group),
-                contentDescription = "Wounds",
+                contentDescription = "Health",
                 tint = null
             )},
             label = { Text("Characters") },
@@ -37,24 +37,28 @@ fun CommonNavBar(
                 Icon(
                     painter = painterResource(id = R.drawable.ic_hitpoints),
                     contentDescription = "Wounds",
-                    tint = null
+                    tint = null,
+                    modifier = Modifier.size(18.dp)
                 )
             },
             label = { Text("Wounds") },
-            selected = currentScreen == Screen.Wounds,
-            onClick = onNavigateToWounds
+            selected = currentScreen == Screen.Health,
+            onClick = onNavigateToHealth,
+            modifier = Modifier.size(18.dp)
         )
         NavigationBarItem(
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_house),
                     contentDescription = "Wounds",
-                    tint = null
+                    tint = null,
+                    modifier = Modifier.size(18.dp)
                 )
             },
             label = { Text("Home") },
             selected = currentScreen == Screen.CharacterDetail,
-            onClick = onNavigateToHome
+            onClick = onNavigateToHome,
+            modifier = Modifier.size(18.dp)
         )
         NavigationBarItem(
             icon = {

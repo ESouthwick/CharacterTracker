@@ -61,7 +61,7 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToHealth = { viewModel.navigateTo(Screen.Health) },
                     onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
@@ -73,7 +73,7 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                 onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                 onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                 onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                onNavigateToHealth = { viewModel.navigateTo(Screen.Health) },
                 onCharacterSelected = { viewModel.selectCharacter(it) },
                 onCreateCharacter = { viewModel.createCharacter(it) }
             )
@@ -87,7 +87,7 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToHealth = { viewModel.navigateTo(Screen.Health) },
                     onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
@@ -101,21 +101,21 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToHealth = { viewModel.navigateTo(Screen.Health) },
                     onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }
         }
-        Screen.Wounds -> {
+        Screen.Health -> {
             selectedCharacter?.let { char ->
-                WoundsScreen(
+                HealthScreen(
                     character = char,
                     onCharacterUpdated = { viewModel.updateCharacter(it) },
                     onNavigateToHome = { viewModel.navigateTo(Screen.CharacterDetail) },
                     onNavigateToCharacters = { viewModel.navigateTo(Screen.Characters) },
                     onNavigateToSkills = { viewModel.navigateTo(Screen.Skills) },
                     onNavigateToInventory = { viewModel.navigateTo(Screen.Inventory) },
-                    onNavigateToWounds = { viewModel.navigateTo(Screen.Wounds) },
+                    onNavigateToHealth = { viewModel.navigateTo(Screen.Health) },
                     onNavigateToSettings = { viewModel.navigateTo(Screen.Settings) }
                 )
             }

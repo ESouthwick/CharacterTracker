@@ -22,7 +22,7 @@ fun CharactersScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit,
+    onNavigateToHealth: () -> Unit,
     onCharacterSelected: (Character) -> Unit,
     onCreateCharacter: (Character) -> Unit
 ) {
@@ -49,7 +49,7 @@ fun CharactersScreen(
                 onNavigateToCharacters = onNavigateToCharacters,
                 onNavigateToSkills = onNavigateToSkills,
                 onNavigateToInventory = onNavigateToInventory,
-                onNavigateToWounds = onNavigateToWounds
+                onNavigateToHealth = onNavigateToHealth
             )
         }
     ) { paddingValues ->

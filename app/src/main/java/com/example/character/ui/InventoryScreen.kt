@@ -27,15 +27,17 @@ fun InventoryScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit,
+    onNavigateToHealth: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     var showGPDialog by remember { mutableStateOf(false) }
     var showIngredientDialog by remember { mutableStateOf(false) }
     var showMaterialDialog by remember { mutableStateOf(false) }
 
+    val token = listOf("Ingredient", "Material", "Food")
     val ingredients = listOf("Fish", "Meat", "Herb", "Vegetable", "Egg", "Flour", "Fruit")
     val materials = listOf("Wood", "Stone", "Leather", "Thread", "Metal")
+    val food = listOf("Lobster", "Pie")
 
     Scaffold(
         topBar = {
@@ -68,7 +70,7 @@ fun InventoryScreen(
                 onNavigateToCharacters = onNavigateToCharacters,
                 onNavigateToSkills = onNavigateToSkills,
                 onNavigateToInventory = onNavigateToInventory,
-                onNavigateToWounds = onNavigateToWounds
+                onNavigateToHealth = onNavigateToHealth
             )
         }
     ) { paddingValues ->
@@ -78,7 +80,6 @@ fun InventoryScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Display current inventory in a 3-column grid
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -148,12 +149,12 @@ fun InventoryScreen(
                                             onCharacterUpdated(character.copy(inventory = currentInventory))
                                         }
                                     },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(36.dp)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowDown,
                                         contentDescription = "Decrease",
-                                        modifier = Modifier.size(16.dp)
+                                        modifier = Modifier.size(36.dp)
                                     )
                                 }
                                 Text(
@@ -170,12 +171,12 @@ fun InventoryScreen(
                                             onCharacterUpdated(character.copy(inventory = currentInventory))
                                         }
                                     },
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(36.dp)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowUp,
                                         contentDescription = "Increase",
-                                        modifier = Modifier.size(16.dp)
+                                        modifier = Modifier.size(36.dp)
                                     )
                                 }
                             }
@@ -207,16 +208,22 @@ fun InventoryScreen(
                                     if (character.gp > 0) {
                                         onCharacterUpdated(character.copy(gp = character.gp - 1))
                                     }
-                                }
+                                },
+                                modifier = Modifier.size(36.dp)
                             ) {
-                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove GP")
+                                Icon(Icons.Default.KeyboardArrowDown,
+                                    contentDescription = "Remove GP",
+                                    modifier = Modifier.size(36.dp))
                             }
                             IconButton(
                                 onClick = {
                                     onCharacterUpdated(character.copy(gp = character.gp + 1))
-                                }
+                                },
+                                modifier = Modifier.size(36.dp)
                             ) {
-                                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add GP")
+                                Icon(Icons.Default.KeyboardArrowUp,
+                                    contentDescription = "Add GP",
+                                    modifier = Modifier.size(36.dp))
                             }
                         }
                     }

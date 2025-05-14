@@ -28,7 +28,7 @@ fun SkillsScreen(
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit,
+    onNavigateToHealth: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     var showGPDialog by remember { mutableStateOf(false) }
@@ -49,7 +49,7 @@ fun SkillsScreen(
                 onNavigateToCharacters = onNavigateToCharacters,
                 onNavigateToSkills = onNavigateToSkills,
                 onNavigateToInventory = onNavigateToInventory,
-                onNavigateToWounds = onNavigateToWounds
+                onNavigateToHealth = onNavigateToHealth
             )
         }
     ) { paddingValues ->
@@ -87,8 +87,7 @@ fun SkillsScreen(
                         Icon(
                             painter = painterResource(id = iconRes),
                             contentDescription = name,
-                            tint = null,
-                            modifier = Modifier.size(48.dp)
+                            tint = null
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
@@ -98,32 +97,6 @@ fun SkillsScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "$level",
-                                style = MaterialTheme.typography.bodyLarge
-                            )
-                            repeat(when (name) {
-                                "Melee" -> character.skills.melee.xpTokens
-                                "Magic" -> character.skills.magic.xpTokens
-                                "Ranged" -> character.skills.ranged.xpTokens
-                                "Defense" -> character.skills.defense.xpTokens
-                                "Thieving" -> character.skills.thieving.xpTokens
-                                "Gathering" -> character.skills.gathering.xpTokens
-                                "Crafting" -> character.skills.crafting.xpTokens
-                                "Cooking" -> character.skills.cooking.xpTokens
-                                else -> 0
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_xpl),
-                                    contentDescription = "XP Token",
-                                    tint = null,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
                         ) {
                             IconButton(
                                 onClick = {
@@ -180,14 +153,18 @@ fun SkillsScreen(
                                     }
                                     onCharacterUpdated(character.copy(skills = updatedSkills))
                                 },
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(36.dp)
                             ) {
                                 Icon(
                                     Icons.Default.KeyboardArrowDown,
                                     contentDescription = "Decrease XP",
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(36.dp)
                                 )
                             }
+                            Text(
+                                text = "$level",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
                             IconButton(
                                 onClick = {
                                     val updatedSkills = when (name) {
@@ -259,12 +236,33 @@ fun SkillsScreen(
                                     }
                                     onCharacterUpdated(character.copy(skills = updatedSkills))
                                 },
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(36.dp)
                             ) {
                                 Icon(
                                     Icons.Default.KeyboardArrowUp,
                                     contentDescription = "Increase XP",
-                                    modifier = Modifier.size(16.dp)
+                                    modifier = Modifier.size(36.dp)
+                                )
+                            }
+                        }
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            repeat(when (name) {
+                                "Melee" -> character.skills.melee.xpTokens
+                                "Magic" -> character.skills.magic.xpTokens
+                                "Ranged" -> character.skills.ranged.xpTokens
+                                "Defense" -> character.skills.defense.xpTokens
+                                "Thieving" -> character.skills.thieving.xpTokens
+                                "Gathering" -> character.skills.gathering.xpTokens
+                                "Crafting" -> character.skills.crafting.xpTokens
+                                "Cooking" -> character.skills.cooking.xpTokens
+                                else -> 0
+                            }) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_xpl),
+                                    contentDescription = "XP Token",
+                                    tint = null
                                 )
                             }
                         }
@@ -296,14 +294,18 @@ fun SkillsScreen(
                                     }
                                 }
                             ) {
-                                Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Remove GP")
+                                Icon(Icons.Default.KeyboardArrowDown,
+                                    contentDescription = "Remove GP",
+                                    modifier = Modifier.size(36.dp))
                             }
                             IconButton(
                                 onClick = {
                                     onCharacterUpdated(character.copy(gp = character.gp + 1))
                                 }
                             ) {
-                                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Add GP")
+                                Icon(Icons.Default.KeyboardArrowUp,
+                                    contentDescription = "Add GP",
+                                    modifier = Modifier.size(36.dp))
                             }
                         }
                     }

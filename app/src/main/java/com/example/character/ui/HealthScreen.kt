@@ -20,14 +20,14 @@ import com.example.character.ui.components.CommonTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WoundsScreen(
+fun HealthScreen(
     character: Character,
     onCharacterUpdated: (Character) -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToCharacters: () -> Unit,
     onNavigateToSkills: () -> Unit,
     onNavigateToInventory: () -> Unit,
-    onNavigateToWounds: () -> Unit,
+    onNavigateToHealth: () -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     var showGPDialog by remember { mutableStateOf(false) }
@@ -43,12 +43,12 @@ fun WoundsScreen(
         },
         bottomBar = {
             CommonNavBar(
-                currentScreen = Screen.Wounds,
+                currentScreen = Screen.Health,
                 onNavigateToHome = onNavigateToHome,
                 onNavigateToCharacters = onNavigateToCharacters,
                 onNavigateToSkills = onNavigateToSkills,
                 onNavigateToInventory = onNavigateToInventory,
-                onNavigateToWounds = onNavigateToWounds
+                onNavigateToHealth = onNavigateToHealth
             )
         }
     ) { paddingValues ->

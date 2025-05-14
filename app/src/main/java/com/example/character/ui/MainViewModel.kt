@@ -66,6 +66,6 @@ enum class Screen {
     Characters,
     Skills,
     Inventory,
-    Wounds,
+    Health,
     Settings
 }
