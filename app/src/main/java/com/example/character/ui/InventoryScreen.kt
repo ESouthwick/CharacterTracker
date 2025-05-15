@@ -33,6 +33,8 @@ fun InventoryScreen(
     var showGPDialog by remember { mutableStateOf(false) }
     var showIngredientDialog by remember { mutableStateOf(false) }
     var showMaterialDialog by remember { mutableStateOf(false) }
+    var showFoodDialog by remember { mutableStateOf(false) }
+    var showExpandedFab by remember { mutableStateOf(false) }
 
     val token = listOf("Ingredient", "Material", "Food")
     val ingredients = listOf("Fish", "Meat", "Herb", "Vegetable", "Egg", "Flour", "Fruit")
@@ -50,16 +52,48 @@ fun InventoryScreen(
         },
         floatingActionButton = {
             Column {
-                FloatingActionButton(
-                    onClick = { showIngredientDialog = true },
-                    modifier = Modifier.padding(bottom = 8.dp)
-                ) {
-                    Icon(Icons.Default.DateRange, contentDescription = "Add Ingredient")
+                if (showExpandedFab) {
+                    FloatingActionButton(
+                        onClick = { showFoodDialog = true },
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
+                        Icon(
+                            painterResource(
+                                id = R.drawable.ic_foodl),
+                                contentDescription = "Food",
+                                tint = null
+                        )
+                    }
+                    FloatingActionButton(
+                        onClick = { showIngredientDialog = true },
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
+                        Icon(
+                            painterResource(
+                                id = R.drawable.ic_ingred),
+                                contentDescription = "Ingredients",
+                                tint = null
+                        )
+                    }
+                    FloatingActionButton(
+                        onClick = { showMaterialDialog = true },
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
+                        Icon(
+                            painterResource(
+                                id = R.drawable.ic_materials),
+                                contentDescription = "Materials",
+                                tint = null
+                        )
+                    }
                 }
                 FloatingActionButton(
-                    onClick = { showMaterialDialog = true }
+                    onClick = { showExpandedFab = !showExpandedFab }
                 ) {
-                    Icon(Icons.Default.Build, contentDescription = "Add Material")
+                    Icon(
+                        if (showExpandedFab) Icons.Default.Close else Icons.Default.Add,
+                        contentDescription = if (showExpandedFab) "Close" else "Add Item"
+                    )
                 }
             }
         },
@@ -106,19 +140,21 @@ fun InventoryScreen(
                             Icon(
                                 painter = painterResource(
                                     id = when (name) {
-                                        "Fish" -> R.drawable.ic_fish
-                                        "Meat" -> R.drawable.ic_meat
-                                        "Herb" -> R.drawable.ic_herbs
-                                        "Vegetable" -> R.drawable.ic_vegetable
-                                        "Egg" -> R.drawable.ic_egg
-                                        "Flour" -> R.drawable.ic_flour
-                                        "Fruit" -> R.drawable.ic_fruit
-                                        "Wood" -> R.drawable.ic_wood
-                                        "Stone" -> R.drawable.ic_stones
-                                        "Leather" -> R.drawable.ic_leather
-                                        "Thread" -> R.drawable.ic_thread
-                                        "Metal" -> R.drawable.ic_metal
-                                        else -> R.drawable.ic_inventory
+                                        "Fish" -> R.drawable.ic_fishl
+                                        "Meat" -> R.drawable.ic_meatl
+                                        "Herb" -> R.drawable.ic_herbsl
+                                        "Vegetable" -> R.drawable.ic_vegetablel
+                                        "Egg" -> R.drawable.ic_eggl
+                                        "Flour" -> R.drawable.ic_flourl
+                                        "Fruit" -> R.drawable.ic_fruitl
+                                        "Wood" -> R.drawable.ic_woodl
+                                        "Stone" -> R.drawable.ic_stonesl
+                                        "Leather" -> R.drawable.ic_leatherl
+                                        "Thread" -> R.drawable.ic_threadl
+                                        "Metal" -> R.drawable.ic_metall
+                                        "Lobster" -> R.drawable.ic_lobsters
+                                        "Pie" -> R.drawable.ic_piel
+                                        else -> R.drawable.ic_bag
                                     }
                                 ),
                                 contentDescription = name,
@@ -149,12 +185,12 @@ fun InventoryScreen(
                                             onCharacterUpdated(character.copy(inventory = currentInventory))
                                         }
                                     },
-                                    modifier = Modifier.size(36.dp)
+                                    modifier = Modifier.size(48.dp)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowDown,
                                         contentDescription = "Decrease",
-                                        modifier = Modifier.size(36.dp)
+                                        modifier = Modifier.size(48.dp)
                                     )
                                 }
                                 Text(
@@ -171,12 +207,12 @@ fun InventoryScreen(
                                             onCharacterUpdated(character.copy(inventory = currentInventory))
                                         }
                                     },
-                                    modifier = Modifier.size(36.dp)
+                                    modifier = Modifier.size(48.dp)
                                 ) {
                                     Icon(
                                         Icons.Default.KeyboardArrowUp,
                                         contentDescription = "Increase",
-                                        modifier = Modifier.size(36.dp)
+                                        modifier = Modifier.size(48.dp)
                                     )
                                 }
                             }
@@ -274,7 +310,7 @@ fun InventoryScreen(
                                                 "Egg" -> R.drawable.ic_egg
                                                 "Flour" -> R.drawable.ic_flour
                                                 "Fruit" -> R.drawable.ic_fruit
-                                                else -> R.drawable.ic_inventory
+                                                else -> R.drawable.ic_bag
                                             }
                                         ),
                                         contentDescription = ingredient,
@@ -331,7 +367,7 @@ fun InventoryScreen(
                                                 "Leather" -> R.drawable.ic_leather
                                                 "Thread" -> R.drawable.ic_thread
                                                 "Metal" -> R.drawable.ic_metal
-                                                else -> R.drawable.ic_inventory
+                                                else -> R.drawable.ic_bag
                                             }
                                         ),
                                         contentDescription = material,
@@ -346,6 +382,60 @@ fun InventoryScreen(
                 },
                 confirmButton = {
                     TextButton(onClick = { showMaterialDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+
+        if (showFoodDialog) {
+            AlertDialog(
+                onDismissRequest = { showFoodDialog = false },
+                title = { Text("Add Food") },
+                text = {
+                    Column {
+                        food.forEach { foodItem ->
+                            Button(
+                                onClick = {
+                                    val currentInventory = character.inventory.toMutableList()
+                                    val existingItem = currentInventory.find { it.name == foodItem }
+                                    if (existingItem != null) {
+                                        currentInventory[currentInventory.indexOf(existingItem)] = 
+                                            existingItem.copy(quantity = existingItem.quantity + 1)
+                                    } else {
+                                        currentInventory.add(InventoryItem(foodItem, 1))
+                                    }
+                                    onCharacterUpdated(character.copy(inventory = currentInventory))
+                                    showFoodDialog = false
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 4.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(
+                                            id = when (foodItem) {
+                                                "Lobster" -> R.drawable.ic_lobster
+                                                "Pie" -> R.drawable.ic_pie
+                                                else -> R.drawable.ic_bag
+                                            }
+                                        ),
+                                        contentDescription = foodItem,
+                                        modifier = Modifier.size(36.dp),
+                                        tint = null
+                                    )
+                                    Text(foodItem)
+                                }
+                            }
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = { showFoodDialog = false }) {
                         Text("Cancel")
                     }
                 }

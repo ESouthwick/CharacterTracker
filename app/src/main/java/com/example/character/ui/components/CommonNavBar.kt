@@ -26,11 +26,13 @@ fun CommonNavBar(
             icon = {Icon(
                 painter = painterResource(id = R.drawable.ic_group),
                 contentDescription = "Health",
-                tint = null
+                tint = null,
+                modifier = Modifier.size(24.dp)
             )},
             label = { Text("Characters") },
             selected = currentScreen == Screen.Characters,
-            onClick = onNavigateToCharacters
+            onClick = onNavigateToCharacters,
+            modifier = Modifier.size(24.dp)
         )
         NavigationBarItem(
             icon = {
@@ -38,13 +40,13 @@ fun CommonNavBar(
                     painter = painterResource(id = R.drawable.ic_hitpoints),
                     contentDescription = "Wounds",
                     tint = null,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             },
             label = { Text("Wounds") },
             selected = currentScreen == Screen.Health,
             onClick = onNavigateToHealth,
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(24.dp)
         )
         NavigationBarItem(
             icon = {
@@ -52,18 +54,18 @@ fun CommonNavBar(
                     painter = painterResource(id = R.drawable.ic_house),
                     contentDescription = "Wounds",
                     tint = null,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             },
             label = { Text("Home") },
             selected = currentScreen == Screen.CharacterDetail,
             onClick = onNavigateToHome,
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier.size(24.dp)
         )
         NavigationBarItem(
             icon = {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_baga),
+                    painter = painterResource(id = R.drawable.ic_bag),
                     contentDescription = "Inventory",
                     tint = null
                 )
@@ -78,7 +80,7 @@ fun CommonNavBar(
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_bar),
+                        painter = painterResource(id = R.drawable.ic_skill),
                         contentDescription = "Skills",
                         tint = null
                     )
