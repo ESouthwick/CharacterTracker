@@ -250,6 +250,33 @@ fun CharacterDetailScreen(
                     }
                 }
             }
+
+            // Group Storage Summary
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNavigateToInventory
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        text = "Group Storage",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    val groupStorageCounts = character.groupStorage.groupBy { it.name }
+                        .mapValues { it.value.sumOf { item -> item.quantity } }
+                    groupStorageCounts.forEach { (name, count) ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(name)
+                            Text("x$count")
+                        }
+                    }
+                }
+            }
         }
 
         if (showGPDialog) {
