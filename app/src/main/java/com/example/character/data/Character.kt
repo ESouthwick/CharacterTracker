@@ -6,6 +6,7 @@ data class Character(
     val name: String,
     val skills: Skills = Skills(),
     val inventory: List<InventoryItem> = emptyList(),
+    val groupStorage: List<InventoryItem> = emptyList(),
     val health: Health = Health(),
     val gp: Int = 0
 ) {
