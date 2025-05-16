@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.character"
+    namespace = "com.tracker.character"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.character"
+        applicationId = "com.tracker.character"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
