@@ -289,13 +289,13 @@ fun InventoryScreen(
                                     Icon(
                                         painter = painterResource(
                                             id = when (ingredient) {
-                                                "Fish" -> R.drawable.ic_fishl
-                                                "Meat" -> R.drawable.ic_meatl
-                                                "Herb" -> R.drawable.ic_herbsl
-                                                "Vegetable" -> R.drawable.ic_vegetablel
-                                                "Egg" -> R.drawable.ic_eggl
-                                                "Flour" -> R.drawable.ic_flourl
-                                                "Fruit" -> R.drawable.ic_fruitl
+                                                "Fish" -> R.drawable.ic_fish
+                                                "Meat" -> R.drawable.ic_meat
+                                                "Herb" -> R.drawable.ic_herbs
+                                                "Vegetable" -> R.drawable.ic_vegetable
+                                                "Egg" -> R.drawable.ic_egg
+                                                "Flour" -> R.drawable.ic_flour
+                                                "Fruit" -> R.drawable.ic_fruit
                                                 else -> R.drawable.ic_bag
                                             }
                                         ),
@@ -577,11 +577,11 @@ private fun GroupStorage(
                                     "Egg" -> R.drawable.ic_eggl
                                     "Flour" -> R.drawable.ic_flourl
                                     "Fruit" -> R.drawable.ic_fruitl
-                                    "Wood" -> R.drawable.ic_wood
-                                    "Stone" -> R.drawable.ic_stones
-                                    "Leather" -> R.drawable.ic_leather
-                                    "Thread" -> R.drawable.ic_thread
-                                    "Metal" -> R.drawable.ic_metal
+                                    "Wood" -> R.drawable.ic_woodl
+                                    "Stone" -> R.drawable.ic_stonesl
+                                    "Leather" -> R.drawable.ic_leatherl
+                                    "Thread" -> R.drawable.ic_threadl
+                                    "Metal" -> R.drawable.ic_metall
                                     "Lobster" -> R.drawable.ic_lobsters
                                     "Pie" -> R.drawable.ic_piel
                                     else -> R.drawable.ic_bag
