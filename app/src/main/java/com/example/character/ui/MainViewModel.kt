@@ -1,13 +1,19 @@
 package com.example.character.ui
 
+import android.app.Application
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
-import androidx.lifecycle.ViewModel
-import com.example.character.data.Character
-import com.example.character.data.Skills
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.character.data.*
 import com.example.character.ui.theme.AppTheme
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val database = CharacterDatabase.getDatabase(application)
+    private val characterDao = database.characterDao()
+
     private val _nameInput = mutableStateOf("")
     val nameInput: State<String> = _nameInput
 
@@ -23,14 +29,29 @@ class MainViewModel : ViewModel() {
     private val _currentTheme = mutableStateOf(AppTheme.DEFAULT)
     val currentTheme: State<AppTheme> = _currentTheme
 
+    init {
+        viewModelScope.launch {
+            characterDao.getAllCharacters()
+                .map { entities -> entities.map { it.toCharacter() } }
+                .collect { characters ->
+                    _characters.value = characters
+                    if (characters.isNotEmpty() && _currentScreen.value == Screen.Main) {
+                        navigateTo(Screen.Characters)
+                    }
+                }
+        }
+    }
+
     fun updateNameInput(input: String) {
         _nameInput.value = input
     }
 
     fun createCharacter(character: Character) {
-        _characters.value = _characters.value + character
-        _selectedCharacter.value = character
-        navigateTo(Screen.CharacterDetail)
+        viewModelScope.launch {
+            characterDao.insertCharacter(CharacterEntity.fromCharacter(character))
+            _selectedCharacter.value = character
+            navigateTo(Screen.CharacterDetail)
+        }
     }
 
     fun selectCharacter(character: Character) {
@@ -39,9 +60,9 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateCharacter(character: Character) {
-        _selectedCharacter.value = character
-        _characters.value = _characters.value.map { 
-            if (it.name == character.name) character else it 
+        viewModelScope.launch {
+            characterDao.insertCharacter(CharacterEntity.fromCharacter(character))
+            _selectedCharacter.value = character
         }
     }
 
